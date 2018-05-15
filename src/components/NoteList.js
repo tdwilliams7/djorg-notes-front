@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { Collapse, Button, CardBody, Card } from 'reactstrap';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { Row, Col } from 'reactstrap';
+
+import AddNote from './AddNote';
 
 export default class NoteList extends Component {
   state = {
@@ -22,18 +26,23 @@ export default class NoteList extends Component {
 
   render() {
     return (
-      <div>
-        {this.state.notes.map(note => {
-          return (
-            <NoteCard
-              key={note.id}
-              title={note.title}
-              body={note.content}
-              id={note.id}
-            />
-          );
-        })}
-      </div>
+      <Row>
+        <Col sm="9">
+          {this.state.notes.map(note => {
+            return (
+              <NoteCard
+                key={note.id}
+                title={note.title}
+                body={note.content}
+                id={note.id}
+              />
+            );
+          })}
+        </Col>
+        <Col>
+          <AddNote />
+        </Col>
+      </Row>
     );
   }
 }
@@ -59,7 +68,9 @@ class NoteCard extends Component {
           <Collapse isOpen={this.state.collapse}>
             <CardBody>
               <p>{this.props.body}</p>
-              <Button>...</Button>
+              <Link to={`/${this.props.id}`}>
+                <Button>...</Button>
+              </Link>
             </CardBody>
           </Collapse>
         </Card>

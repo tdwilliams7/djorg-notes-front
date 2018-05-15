@@ -1,32 +1,48 @@
 import React, { Component } from 'react';
-import { Container, Row, Col } from 'reactstrap';
+import { Container } from 'reactstrap';
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { login } from './store/actions/userActions';
 import logo from './logo.svg';
 import './App.css';
 
 import NoteList from './components/NoteList';
-import AddNote from './components/AddNote';
+import NoteDetail from './components/NoteDetail';
+import Auth from './components/Auth';
 
 class App extends Component {
+  state = {
+    user: ''
+  };
+
   render() {
+    console.log(this.props.user);
     return (
-      <div className="App">
-        <Container fluid>
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <h1 className="App-title">Welcome to React</h1>
-          </header>
-          <Row>
-            <Col sm="6" md="9">
-              <NoteList />
-            </Col>
-            <Col>
-              <AddNote />
-            </Col>
-          </Row>
-        </Container>
-      </div>
+      <Router>
+        <div className="App">
+          <Container fluid>
+            <header className="App-header">
+              <Link to="/">
+                <img src={logo} className="App-logo" alt="logo" />
+              </Link>
+              <h1 className="App-title">Welcome to React</h1>
+            </header>
+            <Switch>
+              <Route path="/notes/:id" component={NoteDetail} />
+              <Route path="/notes" component={NoteList} />
+              <Route path="/" component={Auth} />
+            </Switch>
+          </Container>
+        </div>
+      </Router>
     );
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    user: state.user
+  };
+};
+
+export default connect(mapStateToProps, { login })(App);

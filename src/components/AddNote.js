@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 export default class AddNote extends Component {
   state = {
@@ -9,6 +10,17 @@ export default class AddNote extends Component {
   submitNote = event => {
     event.preventDefault();
     console.log('submitted note');
+    axios
+      .post('http://127.0.0.1:8000/api/notes/', {
+        title: this.state.title,
+        content: this.state.content
+      })
+      .then(({ data }) => {
+        console.log(data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   inputChangeHandler = ({ target }) => {
@@ -20,6 +32,7 @@ export default class AddNote extends Component {
   render() {
     return (
       <div>
+        <h3>Add New Note</h3>
         <form onSubmit={this.submitNote}>
           <div>
             <label htmlFor="title">Title:</label>
