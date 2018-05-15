@@ -16,7 +16,6 @@ class App extends Component {
   };
 
   render() {
-    console.log(this.props.user);
     return (
       <Router>
         <div className="App">
@@ -28,8 +27,17 @@ class App extends Component {
               <h1 className="App-title">Welcome to React</h1>
             </header>
             <Switch>
-              <Route path="/notes/:id" component={NoteDetail} />
-              <Route path="/notes" component={NoteList} />
+              <Route
+                path="/notes/:id"
+                component={NoteDetail}
+                user={this.props.user}
+              />
+              <Route
+                exact
+                path="/notes"
+                component={NoteList}
+                user={this.props.user}
+              />
               <Route path="/" component={Auth} />
             </Switch>
           </Container>

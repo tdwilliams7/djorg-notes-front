@@ -2,16 +2,23 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import { Row, Col } from 'reactstrap';
+import { connect } from 'react-redux';
 
 class NoteDetail extends Component {
-  state = {
-    note: { title: '', content: '', id: '' }
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      note: { title: '', content: '', id: '' },
+      user: ''
+    };
+  }
 
   componentDidMount() {
     const { id } = this.props.match.params;
     axios
-      .get(`http://127.0.0.1:8000/api/notes/${id}`)
+      .get(`http://127.0.0.1:8000/api/notes/${id}`, {
+        headers: { Authorization: `Token ${this.props.user}` }
+      })
       .then(({ data }) => {
         this.setState({
           note: {
@@ -27,7 +34,9 @@ class NoteDetail extends Component {
   deleteHandler = () => {
     const { id } = this.props.match.params;
     axios
-      .delete(`http://127.0.0.1:8000/api/notes/${id}`)
+      .delete(`http://127.0.0.1:8000/api/notes/${id}`, {
+        headers: { Authorization: `Token ${this.props.user}` }
+      })
       .then(succ => {
         this.props.history.push('/');
       })
@@ -40,10 +49,16 @@ class NoteDetail extends Component {
     event.preventDefault();
     const { id } = this.props.match.params;
     axios
-      .put(`http://127.0.0.1:8000/api/notes/${id}/`, {
-        title: this.state.note.title,
-        content: this.state.note.content
-      })
+      .put(
+        `http://127.0.0.1:8000/api/notes/${id}/`,
+        {
+          title: this.state.note.title,
+          content: this.state.note.content
+        },
+        {
+          headers: { Authorization: `Token ${this.props.user}` }
+        }
+      )
       .then(({ data }) => {
         this.setState({
           note: {
@@ -109,4 +124,10 @@ class NoteDetail extends Component {
   }
 }
 
-export default withRouter(NoteDetail);
+const mapStateToProps = state => {
+  return {
+    user: state.user
+  };
+};
+
+export default withRouter(connect(mapStateToProps, null)(NoteDetail));

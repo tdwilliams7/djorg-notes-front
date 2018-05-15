@@ -22,7 +22,6 @@ class Auth extends Component {
   }
 
   componentDidUpdate(oldProps, newProps) {
-    console.log(oldProps.signedIn);
     if (oldProps.signedIn === false && this.props.signedIn === true) {
       this.props.history.push('/notes');
     }
