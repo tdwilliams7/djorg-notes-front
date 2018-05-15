@@ -18,7 +18,6 @@ class NoteList extends Component {
 
   componentDidMount() {
     this.getNotes();
-    console.log(this.props.user);
   }
 
   componentDidUpdate(oldProps, prevState) {
